@@ -92,7 +92,7 @@ class LowKArguments {
   // private:
 public:
   // Number of DOF
-  const int NuG = 16;
+  const int NuG = 40;
 
   double tauF;  // Final time in fm
   double tauIn; // Initial time in fm
