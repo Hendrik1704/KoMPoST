@@ -25,42 +25,42 @@
 //
 // for iy in Ns:
 //     for ix in Ns:
-//         1:x 2:y  
-//         3:T^{tautau} 4:T^{xx} 5:T^{yy} 6:tau^2 T^{etaeta} 
-//         7:-T^{tau x} 8:-T^{tauy} 9:-tau T^{taueta} 
-//         10:-T^{xy} 11:-tau T^{yeta} 12:-tau T^{etax} 
+//         1:x 2:y
+//         3:T^{tautau} 4:T^{xx} 5:T^{yy} 6:tau^2 T^{etaeta}
+//         7:-T^{tau x} 8:-T^{tauy} 9:-tau T^{taueta}
+//         10:-T^{xy} 11:-tau T^{yeta} 12:-tau T^{etax}
 //         13-28:CellData[0 -- 15] -- additonal cell data. See KineticEvolution.cpp for definitions
 //
 // where ix and iy are cell indecies with grid parameters given by EventInput
 // with grid spacing afm in [fm] and grid size [Ns x Ns]
 // x, y given in [fm]
-//       
+//
 // T^{munu} writen out in units [Gev/fm^3]
 void EnergyMomentumTensorMapSave(EnergyMomentumTensorMap *TOut,std::string fname){
-    
+
     using namespace EventInput ;
 
     std::ofstream OutStream;
     OutStream.open(fname.c_str());
-    
+
     std::cerr << "#SAVING ENERGY-MOMENTUM TENSOR AT " << TOut->tau << " fm/c TO " << fname << std::endl;
-    
+
     // Optionally CONVERT  E [GeV^4] TO E [GeV/fm^3] //
     double ScaleFactor= 1./(M_HBARC*M_HBARC*M_HBARC) ;
-    
+
     for(int yS=ySTART;yS<=yEND;yS++){
         for(int xS=xSTART;xS<=xEND;xS++){
-        
+
             // GET RELEVANT COMPONENTS //
             double T00=TOut->Get(0,0,xS,yS);
             double TXX=TOut->Get(1,1,xS,yS);
             double TYY=TOut->Get(2,2,xS,yS);
             double TZZ=TOut->Get(3,3,xS,yS);
-            
+
             double T0X=TOut->Get(0,1,xS,yS);
             double T0Y=TOut->Get(0,2,xS,yS);
             double T0Z=TOut->Get(0,3,xS,yS);
-            
+
             double TXY=TOut->Get(1,2,xS,yS);
             double TYZ=TOut->Get(2,3,xS,yS);
             double TZX=TOut->Get(3,1,xS,yS);
@@ -74,24 +74,24 @@ void EnergyMomentumTensorMapSave(EnergyMomentumTensorMap *TOut,std::string fname
             OutStream << T0X*ScaleFactor << " " << T0Y*ScaleFactor << " " << T0Z*ScaleFactor << " ";
             OutStream << TXY*ScaleFactor << " " << TYZ*ScaleFactor << " " << TZX*ScaleFactor << " ";
 
-            // Additional CellData. See KineticEvolution.cpp for definitions 
+            // Additional CellData. See KineticEvolution.cpp for definitions
             for (int id = 0 ; id < EnergyMomentumTensorMap::NCellData; id++) {
                 OutStream << TOut->GetCellData(id,xS,yS) << " " ;
             }
-            
+
 
             OutStream << std::endl;
-            
+
         }
         OutStream << std::endl;
     }
-    
+
     // CLOSE //
     OutStream.close();
-    
+
     // COMMANDLINE OUTPUT //
     std::cerr << "#DONE" << std::endl;
-    
+
 }
 
 
@@ -102,63 +102,63 @@ void EnergyMomentumTensorMapSave(EnergyMomentumTensorMap *TOut,std::string fname
 //
 // for iy in Ns:
 //     for ix in Ns:
-//         1:ix 2:iy  
-//         3:T^{tautau} 4:T^{xx} 5:T^{yy} 6:tau^2 T^{etaeta} 
-//         7:-T^{tau x} 8:-T^{tauy} 9:-tau T^{taueta} 
+//         1:ix 2:iy
+//         3:T^{tautau} 4:T^{xx} 5:T^{yy} 6:tau^2 T^{etaeta}
+//         7:-T^{tau x} 8:-T^{tauy} 9:-tau T^{taueta}
 //         10:-T^{xy} 11:-tau T^{yeta} 12:-tau T^{etax}
 //
 // where ix and iy are cell indecies with grid parameters given by EventInput
 // with grid spacing afm in [fm] and grid size [Ns x Ns]
-//       
+//
 // T^{munu} given in units Gev/fm^3, but saved in units of [GeV^4]
 void EnergyMomentumTensorMapLoad(EnergyMomentumTensorMap *TIn, std::string fname){
     using namespace EventInput ;
-        
+
     // OPEN INPUT FILE //
     std::ifstream InStream;
     InStream.open(fname.c_str());
-    
+
     // COMMANDLINE OUTPUT //
     std::cerr << "#GETTING ENERGY-MOMENTUM TENSOR FROM FILE " << fname << std::endl;
-    
+
     // INPUT LINE STRING //
     std::string InputLine;
-    
+
     // SPATIAL COORDINATES //
     int xS,yS;
-    
+
     // COMPONENTS OF ENERGY MOMENTUM TENSOR//
     double T00,TXX,TYY,TZZ,T0X,T0Y,T0Z,TXY,TYZ,TZX;
-    
+
     // CONVERT E [GeV/fm^3] TO  E [GeV^4] //
     double ScaleFactor=(M_HBARC*M_HBARC*M_HBARC);
-    
+
     int InputCount=0;
-    bool printfirst=true; 
+    bool printfirst=true;
     // GET DATA LINE BY LINE //
     // Get header first
     getline(InStream,InputLine);
     while(InStream.good()){
-        
+
         // READ LINE //
         getline(InStream,InputLine);
-        
+
         if(!(InputLine.empty())){
-            
+
             std::stringstream InputValues(InputLine);
-            
+
             // GET COMPONENTS OF ENERGY-MOMENTUM TENSOR //
             InputValues >> xS; InputValues >> yS;
-            
+
             InputValues >> T00; InputValues >> TXX; InputValues >> TYY; InputValues >> TZZ;
             InputValues >> T0X; InputValues >> T0Y; InputValues >> T0Z;
             InputValues >> TXY; InputValues >> TYZ; InputValues >> TZX;
-            
+
             // SAVE ENERGY-MOMENTUM TENSOR TO MEMORY //
             const double small_num=1000*GSL_DBL_MIN;
             if (T00 < small_num) {
 		    if (printfirst) {
-			    std::cerr << "Warning: encountered small energy density T^{\\tau\\tau}<" << small_num << " at (ix,iy)=" << xS << "," << yS << ")!! Using T^{\\mu\\nu}=diag(" << 10*small_num << "," << 5*small_num << "," << 5*small_num << ",0) instead.\n"; 
+			    std::cerr << "Warning: encountered small energy density T^{\\tau\\tau}<" << small_num << " at (ix,iy)=" << xS << "," << yS << ")!! Using T^{\\mu\\nu}=diag(" << 10*small_num << "," << 5*small_num << "," << 5*small_num << ",0) instead.\n";
 			    std::cerr << "Further warnings of small T^{\\tau\\tau} will be suppressed." << std::endl;
 			    printfirst=false;
 		    }
@@ -170,28 +170,28 @@ void EnergyMomentumTensorMapLoad(EnergyMomentumTensorMap *TIn, std::string fname
 
             // COUNTER //
             InputCount++;
-            
-            
+
+
         }
-        
+
     }
-    
+
     // CHECK //
     if(InputCount!=Ns*Ns){
         std::cerr << "#ERROR -- COULD NOT LOAD INPUT FILE CORRECTLY" << std::endl;
         exit(EXIT_FAILURE);
     }
-    
+
     // CLOSE //
     InStream.close();
-    
+
     // COMMANDLINE OUTPUT //
     std::cerr << "#DONE" << std::endl;
-    
-    
+
+
 }
-    
-    
+
+
 //Take Tmunu from EnergyMomentumTensorMap class and return T^{munu} (hyperbolic coordinates)
 void get_Tmunu_raised_hyperbolic(class EnergyMomentumTensorMap * Tmunu, int ix, int iy, double Tmunu_raised[4][4]) {
 
@@ -232,7 +232,7 @@ void get_Tmunu_raised_hyperbolic(class EnergyMomentumTensorMap * Tmunu, int ix, 
 // Get conformal entropy from energy density (given in [GeV^4
 double get_conformal_entropy(double energy_density) {
 	const double p=energy_density/3.0;
-	const double T=pow(p/(16*M_PI*M_PI/90),1./4);	
+	const double T=pow(p/(40*M_PI*M_PI/90),1./4);
 	const double entropy=(energy_density+p)/T;
 	return entropy;
 };
@@ -242,14 +242,14 @@ double get_conformal_entropy(double energy_density) {
 // Write initial condition file that can be read by MUSIC
 // for ix in Ns:
 //     for iy in Ns:
-//         1:ieta 2:ix 3:iy  
-//         4:e [GeV/fm^3] 5:u^tau 6:u^x 7:u^y 8:u^eta [fm^{-1}] 
-//         9: pit^{tautau} 10:pi^{taux} 11:pi^{tauy} 12: pi^{taueta} 
+//         1:ieta 2:ix 3:iy
+//         4:e [GeV/fm^3] 5:u^tau 6:u^x 7:u^y 8:u^eta [fm^{-1}]
+//         9: pit^{tautau} 10:pi^{taux} 11:pi^{tauy} 12: pi^{taueta}
 //         13:pi^{xx} 14:pi^{xy} 15:pi^{xeta} 16:pi^{yy} 17:pi^{yeta} 18:pi^{etaeta}
 //
 // where ieta=0, and ix and iy are cell indecies with grid parameters given by EventInput
 // with grid spacing afm in [fm] and grid size [Ns x Ns]
-//       
+//
 //\pi^{\mu\nu} is in units of fermi.
 // Note that the loop order is different than in the input file
 void write_initial_conditions_MUSIC(std::string outfile_name, bool use_sigmamunu_NavierStokes, double dx, double dy, int Nx, int Ny, EnergyMomentumTensorMap *TOut_Full, EnergyMomentumTensorMap *TOut_BG) {
