@@ -133,6 +133,9 @@ void EnergyMomentumTensorMapLoad(EnergyMomentumTensorMap *TIn, std::string fname
     // CONVERT E [GeV/fm^3] TO  E [GeV^4] //
     double ScaleFactor=(M_HBARC*M_HBARC*M_HBARC);
 
+    // SCALE THE WHOLE INPUT ENERGY-MOMENTUM TENSOR //
+    ScaleFactor *= normFactor;
+    
     int InputCount=0;
     bool printfirst=true;
     // GET DATA LINE BY LINE //
