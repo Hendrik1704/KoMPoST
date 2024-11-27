@@ -35,6 +35,7 @@ void Setup(INIReader &reader);
 namespace KoMPoSTParameters {
 extern double EtaOverS;
 extern double EtaOverSTemperatureScale;
+extern double NuEffective;
 extern double Sigma;
 
 extern std::string Regulator;

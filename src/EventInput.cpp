@@ -54,6 +54,7 @@ namespace KoMPoSTParameters {
 
 double EtaOverS = 2. / (4 * M_PI);
 double EtaOverSTemperatureScale = 0.1; // GeV cuttoff temperature scale
+double NuEffective = 16.0;
 
 std::string Regulator("TwoPass");
 
@@ -71,6 +72,8 @@ void Setup(INIReader &reader) {
   EtaOverSTemperatureScale = reader.GetReal(
       "KoMPoSTParameters", "EtaOverSTemperatureScale", EtaOverSTemperatureScale);
 
+  NuEffective = reader.GetReal("KoMPoSTParameters", "NuEffective", NuEffective);
+
   Regulator = reader.GetString("KoMPoSTParameters", "Regulator", Regulator);
 
   //Sigma = reader.GetReal("KoMPoSTParameters", "Sigma", Sigma);
@@ -87,6 +90,7 @@ void Setup(INIReader &reader) {
   std::cerr << "** EventInput ** Initialized KoMPoST parameters:\n" 
             << "  EtaOverS                 = " << EtaOverS << "\n"
             << "  EtaOverSTemperatureScale = " << EtaOverSTemperatureScale << "\n"
+            << "  NuEffective              = " << NuEffective << "\n"
             << "  Regulator                = " << Regulator << "\n"
             << "  EVOLUTION_MODE           = " << EVOLUTION_MODE << " ; 0 -- free streaming, 1 -- EKT\n"
             << "  ENERGY_PERTURBATIONS     = " << ENERGY_PERTURBATIONS << "\n"

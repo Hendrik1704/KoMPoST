@@ -11,6 +11,7 @@
 
 #include <gsl/gsl_math.h>
 #include <iostream>
+#include "EventInput.h"
 #ifndef M_HBARC
 #define M_HBARC 0.197326979
 #endif
@@ -91,8 +92,6 @@ class LowKArguments {
 
   // private:
 public:
-  // Number of DOF
-  const int NuG = 40;
 
   double tauF;  // Final time in fm
   double tauIn; // Initial time in fm
@@ -150,7 +149,7 @@ public:
   }
 
   double Entropy(double e) const {
-    double T = pow(30. / (M_PI * M_PI * NuG) * e, 0.25);
+    double T = pow(30. / (M_PI * M_PI * KoMPoSTParameters::NuEffective) * e, 0.25);
     return 4. / 3. * e / T;
   }
 };

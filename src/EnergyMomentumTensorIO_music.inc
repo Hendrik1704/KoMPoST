@@ -232,10 +232,10 @@ void get_Tmunu_raised_hyperbolic(class EnergyMomentumTensorMap * Tmunu, int ix, 
 	Tmunu_raised[3][3]=Tetaeta;
 }
 
-// Get conformal entropy from energy density (given in [GeV^4
+// Get conformal entropy from energy density (given in [GeV^4])
 double get_conformal_entropy(double energy_density) {
 	const double p=energy_density/3.0;
-	const double T=pow(p/(40*M_PI*M_PI/90),1./4);
+	const double T=pow(p/(KoMPoSTParameters::NuEffective*M_PI*M_PI/90),1./4);	
 	const double entropy=(energy_density+p)/T;
 	return entropy;
 };
