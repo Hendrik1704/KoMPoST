@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
   double tOut = reader.GetReal("KoMPoSTInputs","tOut",default_tOut);
   std::string InputFile = reader.GetString("KoMPoSTInputs", "InputFile", default_InputFile) ;
   std::string OutputFileTag =reader.GetString("KoMPoSTInputs", "OutputFileTag", default_OutputFileTag) ;
+  bool WriteTmunuBackup = reader.GetBoolean("KoMPoSTInputs", "WriteTmunuBackup", true);
 
   //  Get grid parameters from input file
   EventInput::Setup(reader);
@@ -90,11 +91,14 @@ int main(int argc, char **argv) {
   write_initial_conditions_MUSIC(tmp, use_pimunu_NS, EventInput::afm, EventInput::afm, EventInput::Ns, EventInput::Ns, Tmunu_OutFull, Tmunu_OutBG);
 
 
-  tmp = std::string(OutputFileTag) + ".input.txt";
-  EnergyMomentumTensorMapSave(Tmunu_In, tmp);
-  tmp = std::string(OutputFileTag) + ".txt";
-  EnergyMomentumTensorMapSave(Tmunu_OutFull, tmp);
-  tmp = std::string(OutputFileTag) + ".background.txt";
-  EnergyMomentumTensorMapSave(Tmunu_OutBG, tmp);
+  //Backup for energy momentum tensor
+  if (WriteTmunuBackup) {
+    tmp = std::string(OutputFileTag) + ".input.txt";
+    EnergyMomentumTensorMapSave(Tmunu_In, tmp);
+    tmp = std::string(OutputFileTag) + ".txt";
+    EnergyMomentumTensorMapSave(Tmunu_OutFull, tmp);
+    tmp = std::string(OutputFileTag) + ".background.txt";
+    EnergyMomentumTensorMapSave(Tmunu_OutBG, tmp);
+  }
 
 }
