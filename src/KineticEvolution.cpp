@@ -46,7 +46,7 @@ void PrepareKoMPoSTEstimate(EnergyMomentumTensorMap *TOutBG,
                         EnergyMomentumTensorMap *TOutFull) {
   using namespace EventInput;
 
-  for (int yS = xSTART; yS <= xEND; yS++) {
+  for (int yS = ySTART; yS <= yEND; yS++) {
     for (int xS = xSTART; xS <= xEND; xS++) {
       double t00bg = TOutBG->Get(0, 0, xS, yS);
       double t00 = TOutFull->Get(0, 0, xS, yS);
@@ -74,7 +74,7 @@ void RegulateKoMPoSTAddition(EnergyMomentumTensorMap *TOutBG,
                          EnergyMomentumTensorMap *TOutFull) {
   using namespace EventInput;
 
-  for (int yS = xSTART; yS <= xEND; yS++) {
+  for (int yS = ySTART; yS <= yEND; yS++) {
     for (int xS = xSTART; xS <= xEND; xS++) {
       // Extract the stress
       double t00bg = TOutBG->Get(0, 0, xS, yS);
