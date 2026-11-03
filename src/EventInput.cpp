@@ -54,7 +54,7 @@ namespace KoMPoSTParameters {
 
 double EtaOverS = 2. / (4 * M_PI);
 double EtaOverSTemperatureScale = 0.1; // GeV cuttoff temperature scale
-double NuEffective = 16.0;
+double NuEffective = 40.0;
 
 std::string Regulator("TwoPass");
 
